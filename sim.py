@@ -7,12 +7,16 @@
 
 #lw		00	00		0000
 #		op  dest     int
+
 #beq	01	0	0		00
 #		op b/d 	j		reg
+
 #disp	01	1	000		00
 #		op b/d 	null	reg
+
 #add	10	00	00		00
 #		op dest reg1	reg2
+
 #sub	11	00	00		00
 #		op dest	reg1	reg2
 
