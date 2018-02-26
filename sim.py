@@ -16,44 +16,46 @@
 #sub	11	00	00		00
 #		op dest	reg1	reg2
 
-reg0, reg1, reg2, reg3 = 0
+regs = [0, 0, 0, 0]
 
-regs = [reg0, reg1, reg2, reg3]
-
-fileName = raw_input("Enter the name of the file you would like to simulate: ")
+fileName = input("Enter the name of the file you would like to simulate: ")
 
 file = open(fileName)
 instructions = file.readlines()						#list of each line in the txt
 instructions = [x.strip("\n") for x in instructions] #therefore a list of the instructions
-
-count = 0
-
-while count < len(instructions)
-	instruction = instructions[count]
-	opCode = instruction[:2]
-	if(opCode = "00"):	#lw
-		regs[instruction[2:4]] = intRead(instructions[4:7], instructions[4:7]) #stores int
-	elif(opCode = "01"): #beq/disp
-		if(instruction[2:3] = "0"):#beq
-			jump = int(instruction[3:4], base=2) +1 #0+1 = jump 1
-			if(regs[instruction[4:6]]==regs[instruction[6:]]):#compare
-				count+=j
-		else:#disp
-			print(regs[instruction[6:]])
-	elif(opCode = "10"): #add
-		regs[instruction[2:4]] = regs[instruction[4:6]] + regs[instruction[6:]]
-	elif(opCode = "11"):#sub
-		regs[instruction[2:4]] = regs[instruction[4:6]] - regs[instruction[6:]]
-	else:
-		print("opCode failure")
-	count+=1
 
 
 def getReg(regCode):					#converts a binary string to an int 
 	return regs[int(regCode, base=2)]	#and uses it to get the reg encoded
 
 def intRead(intCode, neg): #intCode is the 3 bits that aren't the pos/flag, neg is pos/neg, both strings
-	val = int(intCode, base=2)
+	
+	val = int(str(intCode), base=2)
 	if(int(neg, base=2)):
 		val = val *-1
 	return val	#returns int
+
+
+count = 0
+
+while count < len(instructions):
+	instruction = instructions[count]
+	print("current instruction is " + instruction)
+	opCode = instruction[:2]
+	if(opCode == "00"):	#lw
+		regs[int(instruction[2:4], base=2)] = intRead(instruction[5:], instruction[4:5]) #stores int
+	elif(opCode == "01"): #beq/disp
+		if(instruction[2:3] == "0"):#beq
+			jump = int(instruction[3:4], base=2) +1 #0+1 = jump 1
+			if(getReg(instruction[4:6])==getReg(instruction[6:])):#compare
+				count+=j
+		else:#disp
+			print(getReg(instruction[6:]))
+	elif(opCode == "10"): #add
+		regs[int(instruction[2:4], base =2)] = getReg(instruction[4:6]) + getReg(instruction[6:])
+	elif(opCode == "11"):#sub
+		regs[int(instruction[2:4], base =2)] = getReg(instruction[4:6]) - getReg(instruction[6:])
+	else:
+		print("opCode failure")
+	count+=1
+
