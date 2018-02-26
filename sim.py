@@ -20,15 +20,33 @@ reg0, reg1, reg2, reg3 = 0
 
 regs = [reg0, reg1, reg2, reg3]
 
-fileName = raw_input("enter the name of the file you would like to simulate")
+fileName = raw_input("Enter the name of the file you would like to simulate: ")
 
 file = open(fileName)
 instructions = file.readlines()						#list of each line in the txt
-instructions = [x.strip("\n") for x in content] 	#therefore a list of the instructions
+instructions = [x.strip("\n") for x in instructions] #therefore a list of the instructions
 
-for instruction in instructions
-	opCode = Instruction[:2]
-	
+count = 0
+
+while count < len(instructions)
+	instruction = instructions[count]
+	opCode = instruction[:2]
+	if(opCode = "00"):	#lw
+		regs[instruction[2:4]] = intRead(instructions[4:7], instructions[4:7]) #stores int
+	elif(opCode = "01"): #beq/disp
+		if(instruction[2:3] = "0"):#beq
+			jump = int(instruction[3:4], base=2) +1 #0+1 = jump 1
+			if(regs[instruction[4:6]]==regs[instruction[6:]]):#compare
+				count+=j
+		else:#disp
+			print(regs[instruction[6:]])
+	elif(opCode = "10"): #add
+		regs[instruction[2:4]] = regs[instruction[4:6]] + regs[instruction[6:]]
+	elif(opCode = "11"):#sub
+		regs[instruction[2:4]] = regs[instruction[4:6]] - regs[instruction[6:]]
+	else:
+		print("opCode failure")
+	count+=1
 
 
 def getReg(regCode):					#converts a binary string to an int 
@@ -38,4 +56,4 @@ def intRead(intCode, neg): #intCode is the 3 bits that aren't the pos/flag, neg 
 	val = int(intCode, base=2)
 	if(int(neg, base=2)):
 		val = val *-1
-	return val
+	return val	#returns int
