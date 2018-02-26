@@ -8,8 +8,8 @@
 #lw		00	00		0000
 #		op  dest     int
 
-#beq	01	0	0		00
-#		op b/d 	j		reg
+#beq	01	0	0	01	00
+#		op b/d 	j  reg1	reg2
 
 #disp	01	1	000		00
 #		op b/d 	null	reg
@@ -36,7 +36,7 @@ def intRead(intCode, neg): #intCode is the 3 bits that aren't the pos/flag, neg 
 	
 	val = int(str(intCode), base=2)
 	if(int(neg, base=2)):
-		val = val *-1
+		val = (val+1) *-1
 	return val	#returns int
 
 
@@ -52,13 +52,21 @@ while count < len(instructions):
 		if(instruction[2:3] == "0"):#beq
 			jump = int(instruction[3:4], base=2) +1 #0+1 = jump 1
 			if(getReg(instruction[4:6])==getReg(instruction[6:])):#compare
-				count+=j
+				count+=jump
 		else:#disp
 			print(getReg(instruction[6:]))
 	elif(opCode == "10"): #add
 		regs[int(instruction[2:4], base =2)] = getReg(instruction[4:6]) + getReg(instruction[6:])
+		if(regs[int(instruction[2:4], base =2)]<0):
+			regs[int(instruction[2:4], base =2)] = regs[int(instruction[2:4], base =2)] % -128
+		else:
+			regs[int(instruction[2:4], base =2)] = regs[int(instruction[2:4], base =2)] % 127
 	elif(opCode == "11"):#sub
 		regs[int(instruction[2:4], base =2)] = getReg(instruction[4:6]) - getReg(instruction[6:])
+		if(regs[int(instruction[2:4], base =2)]<0):
+			regs[int(instruction[2:4], base =2)] = regs[int(instruction[2:4], base =2)] % -128
+		else:
+			regs[int(instruction[2:4], base =2)] = regs[int(instruction[2:4], base =2)] % 127 
 	else:
 		print("opCode failure")
 	count+=1
