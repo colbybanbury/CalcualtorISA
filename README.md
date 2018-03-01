@@ -2,7 +2,7 @@
 colby banbury and matt stout
 
 
-Instruction dictionary:
+##Instruction dictionary:
 
 lw
 Semantics:
